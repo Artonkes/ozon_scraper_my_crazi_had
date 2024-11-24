@@ -5,7 +5,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from functions import page_down, collect_product_info
-from read import prints
 
 a = input("Введите название товара: ")
 def get_products_links(item_name=a):
