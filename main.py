@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from functions import page_down, collect_product_info
+import read
 
 a = input("Введите название товара: ")
 def get_products_links(item_name=a):
@@ -74,7 +75,7 @@ def main():
     print('[INFO] Работа выполнена успешно!')
     inr = int(input('Для вывода товаров введите 1 '))
     if inr == 1:
-        prints()
+        read.prints()
     else:
         print("Error")
 
