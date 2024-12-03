@@ -1,8 +1,6 @@
 import json
 
-from main import a
-
-def find_largest_by_key(file_path, price, reviews):
+def find_largest_by_key(file_path, price, reviews, a):
 
     if a == 1:
         try:
@@ -66,11 +64,11 @@ def find_largest_by_key(file_path, price, reviews):
             return f"Произошла ошибка: {e}"
 
 
-def prints():
+def prints(a):
     # Пример использования:
     file_path = 'PRODUCTS_DATA.json' # Замените на путь к вашему файлу
     key_to_price = 'product_discount_price' # Замените на нужный ключ
     key_to_reviews = 'product_reviews' # Замените на нужный ключ
-    largest_obj = find_largest_by_key(file_path, price=key_to_price, reviews=key_to_reviews)
+    largest_obj = find_largest_by_key(file_path, price=key_to_price, reviews=key_to_reviews, a=a)
     print(f"Товар с высокой ценой': {largest_obj['product_discount_price']}\nЕго название: {largest_obj['product_name']} \n ")
     print(f"Товар с наибольшим количеством отзывов: '{largest_obj['product_reviews']}\nЕго название: {largest_obj['product_name']} \n ")

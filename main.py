@@ -1,25 +1,27 @@
 import json
 import time
-from selenium_stealth import stealth
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
+from selenium_stealth import stealth
 from functions import page_down, collect_product_info
-import read
+from read import prints
 
-a = input("Введите название товара: ")
-def get_products_links(item_name=a):
+searchinp=input()
+
+def get_products_links(item_name):
     global products_urls
 
     def init_webdriver():
         driver = webdriver.Chrome()
         stealth(driver, platform='Win32', languages=["en-US", "en"])
         return driver
+
     driver = init_webdriver()
     driver.implicitly_wait(5)
 
     driver.get(url='https://ozon.ru')
-    time.sleep(2)
+    time.sleep(8)
 
     find_input = driver.find_element(By.NAME, 'text')
     find_input.clear()
@@ -36,31 +38,32 @@ def get_products_links(item_name=a):
     page_down(driver=driver)
     time.sleep(2)
 
-    try:
-        find_links = driver.find_elements(By.CLASS_NAME, 'tile-hover-target')
-        products_urls = list(set([f'{link.get_attribute("href")}' for link in find_links]))
+    products_data =[]
+    products_urls = set()
 
-        print('[+] Ссылки на товары собраны!')
-    except:
-        print('[!] Что-то сломалось при сборе ссылок на товары!')
+    while True:
+        try:
+            find_links = driver.find_elements(By.CLASS_NAME, 'tile-hover-target')
+            products_urls.update(link.get_attribute("href") for link in find_links)
 
-    products_urls_dict = {}
+            print('[+] Ссылки на товары собраны!')
 
-    for k, v in enumerate(products_urls):
-        products_urls_dict.update({k: v})
+            for url in products_urls:
+                data = collect_product_info(driver=driver, url=url)
+                print(f'[+] Собрал данные товара с id: {data.get("product_id")}')
+                products_data.append(data)
 
-    with open('products_urls_dict.json', 'w', encoding='utf-8') as file:
-        json.dump(products_urls_dict, file, indent=4, ensure_ascii=False)
+            # Переход на следующую страницу
+            next_button = driver.find_element(By.XPATH, '//a[@data-testid="pagination-next"]')
+            if next_button:
+                next_button.click()
+                time.sleep(2)  # Ждем загрузку следующей страницы
+            else:
+                break  # Если нет кнопки "Далее", выходим из цикла
 
-    time.sleep(2)
-
-    products_data = []
-
-    for url in products_urls:
-        data = collect_product_info(driver=driver, url=url)
-        print(f'[+] Собрал данные товара с id: {data.get("product_id")}')
-        time.sleep(2)
-        products_data.append(data)
+        except Exception as e:
+            print(f'[!] Ошибка при сборе данных: {e}')
+            break
 
     with open('PRODUCTS_DATA.json', 'w', encoding='utf-8') as file:
         json.dump(products_data, file, indent=4, ensure_ascii=False)
@@ -70,16 +73,22 @@ def get_products_links(item_name=a):
 
 
 def main():
-    print('[INFO] Сбор данных начался. Пожалуйста ожидайте...')
-    get_products_links(item_name=a)
-    print('[INFO] Работа выполнена успешно!')
-    inr = int(input('Для вывода товаров введите 1 '))
-    if inr == 1:
-        read.prints()
+    print('[INFO] Сбор данных начался. Пожалуйста, ожидайте...')
+    get_products_links(item_name=searchinp)
+
+    # # Находим лучшее предложение
+    # best_offer = find_best_offer()
+    # if best_offer:
+    #     print(f"[INFO] Лучшее предложение:\nНазвание: {best_offer['product_name']}\nЦена: {best_offer['product_discount_price']}\nОтзывы: {best_offer['product_reviews']}")
+    # else:
+    #     print("[INFO] Нет доступных предложений.")
+    a = int(input("1 "))
+    if a ==1:
+        prints(a)
     else:
-        print("Error")
+        print('error')
 
-
+    print('[INFO] Работа выполнена успешно!')
 
 if __name__ == '__main__':
     main()
