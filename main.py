@@ -21,7 +21,7 @@ def get_products_links(item_name):
     driver.implicitly_wait(5)
 
     driver.get(url='https://ozon.ru')
-    time.sleep(8)
+    time.sleep(3)
 
     find_input = driver.find_element(By.NAME, 'text')
     find_input.clear()

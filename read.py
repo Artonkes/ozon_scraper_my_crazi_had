@@ -70,5 +70,8 @@ def prints(a):
     key_to_price = 'product_discount_price' # Замените на нужный ключ
     key_to_reviews = 'product_reviews' # Замените на нужный ключ
     largest_obj = find_largest_by_key(file_path, price=key_to_price, reviews=key_to_reviews, a=a)
-    print(f"Товар с высокой ценой': {largest_obj['product_discount_price']}\nЕго название: {largest_obj['product_name']} \n ")
-    print(f"Товар с наибольшим количеством отзывов: '{largest_obj['product_reviews']}\nЕго название: {largest_obj['product_name']} \n ")
+    print(f"Его название: {largest_obj['product_name']}\n "
+          f"Товар с высокой ценой': {largest_obj['product_discount_price']}\n"
+          f"Количество отзывов: '{largest_obj['product_reviews']}\n"
+          f"{largest_obj['product_url']}\n")
+    print(f"Товар с наибольшим \nЕго название: {largest_obj['product_name']} \n {largest_obj['product_url']} \n")
