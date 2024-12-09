@@ -1,94 +1,84 @@
 import json
-import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium import webdriver
-from selenium_stealth import stealth
-from functions import page_down, collect_product_info
-from read import prints
+from playwright.sync_api import sync_playwright
 
-searchinp=input()
+def page_down(page):
+    page.evaluate('''
+        const scrollStep = 200; // Размер шага прокрутки (в пикселях)
+        const scrollInterval = 100; // Интервал между шагами (в миллисекундах)
 
-def get_products_links(item_name):
-    global products_urls
+        const scrollHeight = document.documentElement.scrollHeight;
+        let currentPosition = 0;
+        const interval = setInterval(() => {
+            window.scrollBy(0, scrollStep);
+            currentPosition += scrollStep;
 
-    def init_webdriver():
-        driver = webdriver.Chrome()
-        stealth(driver, platform='Win32', languages=["en-US", "en"])
-        return driver
-
-    driver = init_webdriver()
-    driver.implicitly_wait(5)
-
-    driver.get(url='https://ozon.ru')
-    time.sleep(3)
-
-    find_input = driver.find_element(By.NAME, 'text')
-    find_input.clear()
-    find_input.send_keys(item_name)
-    time.sleep(2)
-
-    find_input.send_keys(Keys.ENTER)
-    time.sleep(2)
-
-    current_url = f'{driver.current_url}&sorting=rating'
-    driver.get(url=current_url)
-    time.sleep(2)
-
-    page_down(driver=driver)
-    time.sleep(2)
-
-    products_data =[]
-    products_urls = set()
-
-    while True:
-        try:
-            find_links = driver.find_elements(By.CLASS_NAME, 'tile-hover-target')
-            products_urls.update(link.get_attribute("href") for link in find_links)
-
-            print('[+] Ссылки на товары собраны!')
-
-            for url in products_urls:
-                data = collect_product_info(driver=driver, url=url)
-                print(f'[+] Собрал данные товара с id: {data.get("product_id")}')
-                products_data.append(data)
-
-            # Переход на следующую страницу
-            next_button = driver.find_element(By.XPATH, '//a[@data-testid="pagination-next"]')
-            if next_button:
-                next_button.click()
-                time.sleep(2)  # Ждем загрузку следующей страницы
-            else:
-                break  # Если нет кнопки "Далее", выходим из цикла
-
-        except Exception as e:
-            print(f'[!] Ошибка при сборе данных: {e}')
-            break
-
-    with open('PRODUCTS_DATA.json', 'w', encoding='utf-8') as file:
-        json.dump(products_data, file, indent=4, ensure_ascii=False)
-
-    driver.close()
-    driver.quit()
+            if (currentPosition >= scrollHeight) {
+                clearInterval(interval);
+            }
+        }, scrollInterval);
+    ''')
 
 
 def main():
-    print('[INFO] Сбор данных начался. Пожалуйста, ожидайте...')
-    get_products_links(item_name=searchinp)
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)  # Установите headless=True для скрытого режима
+        context = browser.new_context(
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        )
+        page = context.new_page()
 
-    # # Находим лучшее предложение
-    # best_offer = find_best_offer()
-    # if best_offer:
-    #     print(f"[INFO] Лучшее предложение:\nНазвание: {best_offer['product_name']}\nЦена: {best_offer['product_discount_price']}\nОтзывы: {best_offer['product_reviews']}")
-    # else:
-    #     print("[INFO] Нет доступных предложений.")
-    a = int(input("1 "))
-    if a ==1:
-        prints(a)
-    else:
-        print('error')
+        page.goto('https://www.ozon.ru/')
+        page.wait_for_timeout(2000)
+        page.reload()
+        page.wait_for_timeout(2000)
+        print(page)
+        page.get_by_placeholder('Искать на Ozon').type('Наушники', delay=1.5)  # Здесь менять запрос
+        page.click('button[aria-label="Поиск"]')
+        print(page)
 
-    print('[INFO] Работа выполнена успешно!')
+        products = []
+        total_scrolls = 5  # Количество прокруток
 
-if __name__ == '__main__':
+        for _ in range(total_scrolls):  # Пролистывание страницы для предварительной прогрузки
+            page_down(page)
+            page.wait_for_timeout(1000)  # Дайте время для загрузки новых элементов
+
+            # Ждем, пока новые элементы загрузятся
+            page.wait_for_selector('.tile-root')  # Ждем появления карточек товаров
+            product_cards = page.query_selector_all('.tile-root')
+
+            for card in product_cards:
+                title_element = card.query_selector('.tsBody500Medium')
+                title = title_element.inner_text() if title_element else 'Нет названия'
+
+                price_element = card.query_selector('.tsHeadline500Medium')
+                price = price_element.inner_text() if price_element else 'Нет цены'
+
+                raiting_element = card.query_selector('.tsBodyMBold span:nth-of-type(1)')  # Первый span для рейтинга
+                raiting = raiting_element.inner_text() if raiting_element else 'Нет рейтинга'
+
+                reviews_element = card.query_selector('.tsBodyMBold span:nth-of-type(2)')  # Второй span для отзывов
+                reviews = reviews_element.inner_text() if reviews_element else 'Нет отзывов'
+
+                product_data = {
+                    'product_name': title,
+                    'product_price': price,
+                    'product_stars': raiting,
+                    'product_reviews': reviews,
+                }
+
+                products.append(product_data)
+
+        # Удалите дубликаты, если они есть
+        unique_products = {product['product_name']: product for product in products}.values()
+
+        with open('PRODUCTS_DATA.json', 'w', encoding='utf-8') as file:
+            json.dump(list(unique_products), file, indent=4, ensure_ascii=False)
+
+        print('[info] Программа выполнена успешно')
+        page.wait_for_timeout(10000)
+        browser.close()
+
+
+if __name__ == "__main__":
     main()
