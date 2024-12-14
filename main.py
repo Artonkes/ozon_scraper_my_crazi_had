@@ -3,7 +3,7 @@ import asyncio
 from Marketplaces.ozon_pars import OzonPars  # Измените на правильный импорт
 from Marketplaces.wildberries_pars import WbPars
 
-async def main():
+async def main(pars_inp, scrolls):
     try:
         # Создаем экземпляры классов
         oz_pars_instance = OzonPars(scroll_count=scrolls, oz_inp=pars_inp)
@@ -28,8 +28,3 @@ async def main():
         print(f'Произошла ошибка: {e}')
 
     print('[YAZAEBALSYA] Программа выполнена успешно')
-
-if __name__ == "__main__":
-    pars_inp = input('Введите товар, который хотите найти: ')
-    scrolls = 5
-    asyncio.run(main())
