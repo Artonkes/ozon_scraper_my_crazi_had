@@ -1,5 +1,5 @@
 import json
-import asyncio
+
 from Marketplaces.ozon_pars import OzonPars  # Измените на правильный импорт
 from Marketplaces.wildberries_pars import WbPars
 

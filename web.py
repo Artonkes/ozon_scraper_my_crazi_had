@@ -1,13 +1,13 @@
 import asyncio
 from flask import Flask, render_template, request
 from main import main
+import json
 
 app = Flask('Deshovka')
 
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    global INPUT_VALUE
     if request.method == "POST":
         # Получаем данные из формы
         input_value = request.form.get("input")
@@ -17,6 +17,11 @@ def home():
             return "Поле не заполнено"  # Или перенаправление на страницу ошибки
 
         else:asyncio.run(main(pars_inp=input_value, scrolls=5))
+
+        with open('PRODUCTS_DATA.json') as f:
+            data = json.load(f)
+
+        return render_template('product_json.html', data=data)
 
     else:
         return render_template("home.html")
