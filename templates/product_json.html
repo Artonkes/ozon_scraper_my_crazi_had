@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block style %}<Link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}"> {% endblock %}
+{% block title %} Товары {% endblock %}
+{% block h1 %} Товары {% endblock %}
+
+{% block div %}
+<div class="output_json">
+    {% for key in data %}
+        {% set a = key['product_market'] %}
+        {% set b = key['product_name'] %}
+        {% set c = key['product_link'] %}
+        {% set d = key['product_price'] %}
+        {% set e = key['product_stars'] %}
+        {% set h = key['product_reviews'] %}
+
+        {% set k = key['src'] %}
+
+        <p>{{a}}</p>
+        <p>{{b}}</p>
+        <p>{{c}}</p>
+        <p>{{d}}</p>
+        <p>{{e}}</p>
+        <p>{{h}}</p>
+        <p>
+        </p>
+<!--        <img src="{{k}}" width="172" height="229,3">-->
+    {% endfor %}
+</div>
+{% endblock %}
