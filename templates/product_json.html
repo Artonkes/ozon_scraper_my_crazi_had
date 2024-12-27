@@ -6,25 +6,37 @@
 
 {% block div %}
 <div class="output_json">
-    {% for key in data %}
-        {% set a = key['product_market'] %}
-        {% set b = key['product_name'] %}
-        {% set c = key['product_link'] %}
-        {% set d = key['product_price'] %}
-        {% set e = key['product_stars'] %}
-        {% set h = key['product_reviews'] %}
+    <div class="product-list"> <!-- Переместите этот контейнер сюда -->
+        {% for key in data %}
+            {% set market = key['product_market'] %}
+            {% set name = key['product_name'] %}
+            {% set link = key['product_link'] %}
+            {% set price = key['product_price'] %}
+            {% set stars = key['product_stars'] %}
+            {% set photo = key['product_photo'] %}
 
-        {% set k = key['src'] %}
-
-        <p>{{a}}</p>
-        <p>{{b}}</p>
-        <p>{{c}}</p>
-        <p>{{d}}</p>
-        <p>{{e}}</p>
-        <p>{{h}}</p>
-        <p>
-        </p>
-<!--        <img src="{{k}}" width="172" height="229,3">-->
-    {% endfor %}
+            <div class="product-item">
+                <div class="product-img">
+                    <a href="{{link}}">
+                        <img src="{{photo}}" alt="{{name}}">
+                    </a>
+                </div>
+                <h3>{{name}}</h3>
+                <span class="price">{{price}}</span>
+                <div class="stars">{{stars}}</div>
+                <div class="actions">
+                    <!-- <div class="add-to-cart">
+                        <a href="{{link}}" class="cart-button">перейти к товару</a>
+                    </div> -->
+                    <!-- <div class="add-to-links">
+                        <a href="" class="wishlist"></a>
+                        <a href="" class="compare"></a>
+                    </div> -->
+                    <label>{{market}}</label>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
+
 {% endblock %}

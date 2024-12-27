@@ -32,6 +32,10 @@ class YMPars:
                         title_element = await card.query_selector('span[itemprop="name"]')
                         title = await title_element.inner_text() if title_element else 'Нет названия'
 
+                        
+                        photo_element = await card.query_selector('img.w7Bf7')
+                        photo = await photo_element.get_attribute('src') if photo_element else 'Нет картинки'
+
                         link_element = await card.query_selector('a[data-auto="snippet-link"]')
                         link = await link_element.get_attribute('href') if link_element else 'Нет ссылки'
 
@@ -47,6 +51,7 @@ class YMPars:
                         ym_product_data = {
                             'product_market': 'YandexMarket',
                             'product_name': title,
+                            'product_photo': photo,
                             'product_link': link,
                             'product_price': price,
                             'product_stars': raiting,

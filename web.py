@@ -14,7 +14,7 @@ def home():
 
         # Обработка ошибок (важно!)
         if input_value is None or len(input_value) == 0:
-            return "Поле не заполнено"  # Или перенаправление на страницу ошибки
+            return render_template("home.html")  # Или перенаправление на страницу ошибки
 
         else:asyncio.run(main(pars_inp=input_value, scrolls=5))
 

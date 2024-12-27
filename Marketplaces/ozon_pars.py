@@ -33,6 +33,9 @@ class OzonPars:
                         title_element = await card.query_selector('.tsBody500Medium')
                         title = await title_element.inner_text() if title_element else 'Нет названия'
 
+                        photo_element = await card.query_selector('img.i0x_23 b933-a')
+                        photo = await photo_element.get_attribute('src') if photo_element else 'Нет картинки'
+
                         link_element = await card.query_selector('a.tile-hover-target')
                         link = await link_element.get_attribute('href') if link_element else 'Нет ссылки'
 
@@ -48,6 +51,7 @@ class OzonPars:
                         product_data = {
                             'product_market': 'Ozon',
                             'product_name': title,
+                            'product_photo': photo,
                             'product_link': link,
                             'product_price': price,
                             'product_stars': raiting,

@@ -1,29 +1,99 @@
-.d3 {background: #F9F0DA;}
-.d3 form {
-  background: #A3D0C3;
+.d1 {box-sizing: border-box;}
+body{margin: 0;}
+div {padding: 30px 0}
+form {
+  position: relative;
+  width: 300px;
+  margin: 0 auto;
 }
-.d3 input, .d3 button {
-  border: none;
-  outline: none;
-  background: transparent;
-}
-.d3 input {
+.d1 input {
   width: 100%;
   height: 42px;
-  padding-left: 15px;
+  padding-left: 10px;
+  border: 2px solid #3134ff;
+  border-radius: 5px;
+  outline: none;
+
 }
-.d3 button {
-  height: 42px;
-  width: 42px;
-  position: absolute;
+.d1 button {
+  position: absolute; 
   top: 0;
-  right: 0;
+  right: 0px;
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: #3134ff;
+  border-radius: 0 5px 5px 0;
   cursor: pointer;
 }
-.d3 button:before {
+.d1 button:before {
   content: "\f002";
   font-family: FontAwesome;
   font-size: 16px;
-  color: #F9F0DA;
 }
 
+
+/* Основные стили для контейнера с товарами */
+.product-list {
+  display: flex; /* Используйте Flexbox для размещения товаров в ряд */
+  flex-wrap: wrap; /* Позволяет товарам переходить на новую строку, если не хватает места */
+  justify-content: space-between; /* Размещает товары равномерно с отступами между ними */
+  margin: 15px; /* Отступ вокруг контейнера */
+  
+}
+
+/* Стили для отдельных товаров */
+.product-item {
+  width: calc(20% - 20px); /* Устанавливаем ширину на 25% минус отступы */
+  margin: 10px; /* Отступ между товарами */
+  padding: 10px;
+  border: 1px solid #0509ff;
+  background: white;
+  font-family: "Open Sans";
+  overflow: hidden;
+  transition: .4s linear;
+  border-radius: 10px; /* Радиус границ */
+  display: flex; /* Используем Flexbox для вертикального размещения содержимого */
+  flex-direction: column; /* Располагаем элементы внутри карточки вертикально */
+  justify-content: space-between; /* Размещаем элементы сверху и снизу */
+  align-items: center; /* Центрируем содержимое */
+}
+
+/* Стили для изображений товара */
+.product-img img {
+  max-width: 100%; /* Убедитесь, что изображение не превышает ширину карточки */
+  height: auto; /* Сохраняем пропорции изображения */
+}
+
+/* Стили для заголовка и других текстов */
+h3 {
+  font-size: 1.2em; /* Размер заголовка */
+  margin: 10px 0; /* Отступы вокруг заголовка */
+}
+
+.price {
+  font-size: 1.5em; /* Размер цены */
+  color: #333; /* Цвет текста цены */
+  justify-content: center;  
+  
+}
+
+.actions {
+  display: flex; /* Используем Flexbox для размещения кнопок */
+  justify-content: space-between; /* Размещаем кнопки по краям */
+  width: 100%; /* Занимаем всю ширину */
+}
+
+/* Стили для кнопок */
+.cart-button {
+  background-color: #0509ff; /* Цвет фона кнопки */
+  color: white; /* Цвет текста */
+  padding: 10px 15px; /* Отступы внутри кнопки */
+  border: none; /* Убираем границу */
+  border-radius: 5px; /* Радиус границ кнопки */
+  text-decoration: none; /* Убираем подчеркивание */
+}
+
+.cart-button:hover {
+  background-color: #4b48ff; /* Цвет фона при наведении */
+}
