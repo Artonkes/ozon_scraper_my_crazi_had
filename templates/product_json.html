@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
-{% block style %}<Link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}"> {% endblock %}
 {% block title %} Товары {% endblock %}
-{% block h1 %} Товары {% endblock %}
 
 {% block div %}
 <div class="output_json">
@@ -15,25 +13,16 @@
             {% set stars = key['product_stars'] %}
             {% set photo = key['product_photo'] %}
 
-            <div class="product-item">
-                <div class="product-img">
-                    <a href="{{link}}">
-                        <img src="{{photo}}" alt="{{name}}">
-                    </a>
+            <div class="product-card">
+              <img src="{{ photo }}" class="product-image">
+              <div class="product-info">
+                <h2 class="product-title">{{ name }}</h2>
+                <p class="product-price">Цена: <span>{{ price }}</span></p>
+                <div class="product-rating">
+                  <span>⭐️⭐️⭐️⭐️⭐️</span> {{ stars }}
+                <a href="{{ link }}" >{{ market }}</a>
                 </div>
-                <h3>{{name}}</h3>
-                <span class="price">{{price}}</span>
-                <div class="stars">{{stars}}</div>
-                <div class="actions">
-                    <!-- <div class="add-to-cart">
-                        <a href="{{link}}" class="cart-button">перейти к товару</a>
-                    </div> -->
-                    <!-- <div class="add-to-links">
-                        <a href="" class="wishlist"></a>
-                        <a href="" class="compare"></a>
-                    </div> -->
-                    <label>{{market}}</label>
-                </div>
+              </div>
             </div>
         {% endfor %}
     </div>

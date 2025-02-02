@@ -1,17 +1,30 @@
 {% extends 'base.html' %}
 
-
-{% block style %}<Link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}"> {% endblock %}
 {% block title %} Главная страница {% endblock %}
-{% block h1 %} Главная страница {% endblock %}
+
 {% block div %}
-<div class="d1">
-<form method="POST" action="/">
-    <input type="text" id="myInput" name="input" placeholder="Введите данные">
-    <button type="submit"></button>
-    </form>
-</form>
+<div class="img-markets">
+        <div class="curved-quadrilateral" id="curved-quadrilateral-1">
+            <img src="https://i.postimg.cc/X7PPx1kT/wildberries.jpg" alt="Market Image 1" />
+        </div>
+        <div class="curved-quadrilateral" id="curved-quadrilateral-2">
+            <img src="https://i.postimg.cc/W1JHym9t/image.jpg" alt="Market Image 2" />
+        </div>
+    <div class="input-placeholder">
+        <form method="POST" action="/">
+            <input type="text" id="myInput" name="input" placeholder="Введите данные">
+        </form>
+    </div>
 </div>
 {% endblock %}
 
+{% block filter %}
+<div class="header-buttons">
+    <form method="POST" action="/">
+        <input type="number" id="min_price_input" name="min_price" placeholder="Минимальная цена">
+        <input type="number" id="max_price_input" name="max_price" placeholder="Максимальная цена">
+        <button type="submit">Применить фильтр</button>
+    </form>
+</div>
+{% endblock %}
 
