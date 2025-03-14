@@ -1,0 +1,412 @@
+/* Общий стиль */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.img-markets {
+    white-space: nowrap;
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    overflow: hidden; /* Для избегания лишнего скролла */
+}
+
+.curved-quadrilateral {
+    position: absolute;
+    width: 100%;
+    height: 60%;
+    z-index: 1;
+}
+
+#curved-quadrilateral-1 {
+    clip-path: polygon(0 100%, 0 0, 100% 0);
+}
+
+#curved-quadrilateral-2 {
+    clip-path: polygon(100% 100%, 0 100%, 100% 0);
+}
+
+img {
+    height: auto;
+    width: 100%;
+    object-fit: cover;
+}
+
+.input-placeholder {
+    position: absolute;
+    top: 25%;
+    transform: translateY(26);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    max-width: 350px;
+    height: 50px;
+    font-size: 18px;
+    text-align: center;
+    border: 2px solid #212121;
+    border-radius: 5px;
+    padding: 0 10px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+input::placeholder {
+    text-align: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    height: 60px;
+    background-color: #f0f0f0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: #2ecc71;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.header-buttons button {
+    padding: 10px 15px;
+    font-size: 1em;
+    border: none;
+    background-color: #95a5a6;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.header-buttons button:hover {
+    background-color: #2ecc71;
+}
+
+.header-line-bottom {
+    background-color: #2ecc71;
+    height: 2px;
+    width: 100%;
+}
+
+.filter-container {
+    transform: translateY(270px);
+    white-space: nowrap;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Отступ снизу, чтобы отделить от основного контента */
+    
+}
+
+.filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.filter-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-inputs input {
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    text-align: center;
+    border: 2px solid #212121;
+    border-radius: 5px;
+    padding: 0 10px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.filter-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    background-color: #2ecc71;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-button:hover {
+    background-color: #27ae60;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  label:hover {
+    color: #007bff; /* Изменяем цвет при наведении */
+  }
+  
+  input:focus + label {
+    color: #0056b3; /* Меняем цвет при фокусе на input */
+  }
+
+/* Адаптивные стили */
+
+/* Маленькие экраны (смартфоны) */
+@media (max-width: 480px) {
+    .input-placeholder {
+        top: 20%;
+    }
+
+    input {
+        max-width: 250px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .header-buttons button {
+        font-size: 0.9em;
+    }
+}#product-list {
+    display: flex;
+    flex-wrap: wrap; /* Позволяет переносить элементы на новую строку */
+    gap: 16px; /* Отступ между карточками */
+    justify-content: center; /* Центрирование карточек */
+    padding: 20px;
+}
+
+.product-card {
+    width: calc(25% - 16px); /* 4 карточки в ряд (измените на 33% для 3 карточек) */
+    min-width: 250px; /* Минимальная ширина карточки */
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #cccccc;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; 
+    margin-top: 20px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.filter-form {
+    display: flex;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.filter-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-inputs input {
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    text-align: center;
+    border: 2px solid #212121;
+    border-radius: 5px;
+    padding: 0 10px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.filter-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    background-color: #2ecc71;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-button:hover {
+    background-color: #27ae60;
+}
+
+/* Средние экраны (планшеты) */
+@media (max-width: 768px) {
+    input {
+        max-width: 300px;
+        height: 45px;
+        font-size: 17px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .header-buttons button {
+        font-size: 1em;
+    }
+}
+
+/* Большие экраны (десктопы) */
+@media (min-width: 1200px) {
+    input {
+        max-width: 400px;
+        height: 55px;
+        font-size: 20px;
+    }
+
+    h1 {
+        font-size: 3em;
+    }
+
+    .header-buttons button {
+        font-size: 1.2em;
+    }
+
+}
+/* Товары */
+.product-list {
+    display: flex; /* Используйте Flexbox для размещения товаров в ряд */
+    flex-wrap: wrap; /* Позволяет товарам переходить на новую строку, если не хватает места */
+    justify-content: space-between; /* Размещает товары равномерно с отступами между ними */
+    margin: 15px; /* Отступ вокруг контейнера */
+  }
+  * {
+     box-sizing: border-box;
+  }
+  .product-card {
+      width: 300px;
+      border: 1px solid #70AD47;
+      border-radius: 8px;
+      overflow: hidden;
+      font-family: 'Roboto', sans-serif;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+      background: #fff;
+  }
+  
+  .product-card:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Стили для изображения товара */
+  .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+  }
+  
+  /* Стили для названия товара */
+  .product-title {
+      font-size: 18px;
+      font-weight: 500;
+      margin: 12px 12px 8px;
+      color: #333;
+      line-height: 1.3;
+  }
+  
+  /* Стили для цены товара */
+  .product-price {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 12px 8px;
+      color: #000;
+  }
+  
+  /* Стили для блока отзывов */
+  .product-reviews {
+      margin: 0 12px 12px;
+      display: flex;
+      align-items: center;
+  }
+  
+  .review-count {
+      font-size: 14px;
+      color: #666;
+  }
+  
+  /* Стили для блока маркетплейса */
+  .marketplace {
+      display: flex;
+      align-items: center;
+      padding: 0 12px 12px;
+  }
+  
+  .marketplace-logo {
+      width: 50px;
+      height: auto;
+      margin-right: 8px;
+  }
+  
+  .marketplace-name {
+      font-size: 14px;
+      color: #666;
+  }
+  
+  @font-face {
+      font-family: 'Casagrande Antifascista Bold'; /* Название шрифта */
+      src: url('fonts/CasagrandeAntifascista-Bold_0.ttf') format('truetype'); /* Путь к файлу */
+      font-weight: bold; 
+  }
+
+  #product-list {
+    display: flex;
+    flex-wrap: wrap; /* Позволяет переносить элементы на новую строку */
+    gap: 16px; /* Отступ между карточками */
+    justify-content: center; /* Центрирование карточек */
+    padding: 20px;
+}
+
+.product-card {
+    width: calc(12.5% - 10px); /* 8 карточек в ряд */
+    min-width: 250px; /* Минимальная ширина карточки */
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}

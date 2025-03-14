@@ -4,28 +4,79 @@
 
 {% block div %}
 <div class="output_json">
-    <div class="product-list"> <!-- Переместите этот контейнер сюда -->
+    <div id="product-list"> 
         {% for key in data %}
             {% set market = key['product_market'] %}
             {% set name = key['product_name'] %}
             {% set link = key['product_link'] %}
             {% set price = key['product_price'] %}
-            {% set stars = key['product_stars'] %}
+            {% set stars = key['product_reviews'] %}
+            {% set reviews = key['product_stars'] %}
             {% set photo = key['product_photo'] %}
 
             <div class="product-card">
-              <img src="{{ photo }}" class="product-image">
-              <div class="product-info">
-                <h2 class="product-title">{{ name }}</h2>
-                <p class="product-price">Цена: <span>{{ price }}</span></p>
-                <div class="product-rating">
-                  <span>⭐️⭐️⭐️⭐️⭐️</span> {{ stars }}
-                <a href="{{ link }}" >{{ market }}</a>
-                </div>
+              <a href="{{ link }}" class="product-link">
+                  <img src="{{ photo }}" alt="{{ name }}" class="product-image">
+              </a>
+              <div class="product-details">
+                  <h3 class="product-title">{{ name }}</h3>
+                  <p class="product-price">{{ price }}</p>
+                  <div class="product-reviews">
+                      <span class="review-count">⭐️{{ stars }}</span>
+                  </div>
+                  <div class="product-reviews">
+                    <span class="review-count">{{ reviews }}</span>
+                  </div>
+                  <div class="marketplace">
+                      <span class="marketplace-name">{{ market }}</span>
+                  </div>
               </div>
-            </div>
+          </div>
         {% endfor %}
     </div>
 </div>
+
+<script>
+    async function fetchProducts() {
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('user_id'); // Получаем user_id из URL
+            const response = await fetch(`/api/products?user_id=${userId}`);
+            const products = await response.json();
+            const productList = document.getElementById("product-list");
+
+            productList.innerHTML = ''; // Очищаем список перед обновлением
+
+            products.forEach(product => {
+                const productCard = `
+                    <div class="product-card">
+                        <a href="${product.product_link}" class="product-link">
+                            <img src="${product.product_photo}" alt="${product.product_name}" class="product-image">
+                        </a>
+                        <div class="product-details">
+                            <h3 class="product-title">${product.product_name}</h3>
+                            <p class="product-price">${product.product_price}</p>
+                            <div class="product-reviews">
+                                <span class="review-count">⭐️${product.product_reviews}</span>
+                            </div>
+                            <div class="product-reviews">
+                                <span class="review-count">${product.product_stars}</span>
+                            </div>
+                            <div class="marketplace">
+                                <span class="marketplace-name">${product.product_market}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                productList.innerHTML += productCard;
+            });
+        } catch (error) {
+            console.error("Ошибка загрузки товаров:", error);
+        }
+    }
+
+    setInterval(fetchProducts, 5000); // Запрос каждые 5 секунд
+</script>
+
 
 {% endblock %}

@@ -4,27 +4,33 @@
 
 {% block div %}
 <div class="img-markets">
-        <div class="curved-quadrilateral" id="curved-quadrilateral-1">
-            <img src="https://i.postimg.cc/X7PPx1kT/wildberries.jpg" alt="Market Image 1" />
-        </div>
-        <div class="curved-quadrilateral" id="curved-quadrilateral-2">
-            <img src="https://i.postimg.cc/W1JHym9t/image.jpg" alt="Market Image 2" />
-        </div>
+    <div class="curved-quadrilateral" id="curved-quadrilateral-1">
+        <img src="https://i.postimg.cc/X7PPx1kT/wildberries.jpg" alt="Market Image 1" />
+    </div>
+    <div class="curved-quadrilateral" id="curved-quadrilateral-2">
+        <img src="https://i.postimg.cc/W1JHym9t/image.jpg" alt="Market Image 2" />
+    </div>
     <div class="input-placeholder">
-        <form method="POST" action="/">
+        <!-- Удалил лишний формы и объединил. Теперь все данные буду отправлены на endpoint ^-^ -->
+        <form method="POST" action="/" id="search-filter-form">
             <input type="text" id="myInput" name="input" placeholder="Введите данные">
+            
+            <div class="filter-container">
+                <div class="filter-inputs">
+                    <div class="filter-price">
+                        <label>Цена</label>
+                        <input type="number" id="min_price_input" name="min_price" placeholder="От">
+                        <input type="number" id="max_price_input" name="max_price" placeholder="До">
+                    </div>
+                    <div class="filter-raitin">
+                        <label>Рейтинг</label>
+                        <input type="number" id="min_rating_input" name="min_rating" placeholder="От">
+                        <input type="number" id="max_rating_input" name="max_rating" placeholder="До">
+                    </div>
+                </div>
+                <button type="submit" class="filter-button">Применить фильтры</button>
+            </div>
         </form>
     </div>
 </div>
 {% endblock %}
-
-{% block filter %}
-<div class="header-buttons">
-    <form method="POST" action="/">
-        <input type="number" id="min_price_input" name="min_price" placeholder="Минимальная цена">
-        <input type="number" id="max_price_input" name="max_price" placeholder="Максимальная цена">
-        <button type="submit">Применить фильтр</button>
-    </form>
-</div>
-{% endblock %}
-

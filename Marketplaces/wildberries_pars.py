@@ -11,6 +11,7 @@ class WbPars:
         self.sorted_file = f'{user_id}_SORTED_PRODUCTS_DATA.json'
         self.wb_unique_products = []
 
+
     async def wb_parse(self):
         try:
             async with async_playwright() as p:
@@ -67,6 +68,7 @@ class WbPars:
     def save_product(self, product):
         try:
             with open(self.output_file, 'r+', encoding='utf-8') as file:
+                print(f'[WB] внёс в {self.output_file}')
                 try:
                     data = json.load(file)
                 except json.JSONDecodeError:

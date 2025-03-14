@@ -3,9 +3,10 @@ import os
 import time
 import json
 import uuid
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from main import main
 import concurrent.futures
+from functions import sort_products
 
 app = Flask('Deshovka')
 
@@ -59,31 +60,46 @@ def run_async_task(pars_inp, scrolls, user_id):
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST":
-        # Получаем данные из формы
         input_value = request.form.get("input")
+        min_price = request.form.get("min_price")
+        max_price = request.form.get("max_price")
+        min_rating = request.form.get("min_rating")
+        max_rating = request.form.get("max_rating")
 
         # Обработка ошибок (важно!)
         if input_value is None or len(input_value) == 0:
             return render_template("home.html")  # Или перенаправление на страницу ошибки
 
-        else:
-            # Генерируем уникальный ID для пользователя
-            user_id = generate_user_id()
+        # Генерируем уникальный ID для пользователя
+        user_id = generate_user_id()
 
-            # Запускаем асинхронную задачу в фоновом потоке
-            executor.submit(run_async_task, input_value, 5, user_id)
+        # Запускаем асинхронную задачу в фоновом потоке
+        executor.submit(run_async_task, input_value, 5, user_id)
 
-            # Перенаправление на страницу с продуктами сразу
-            return redirect(url_for('products', user_id=user_id))
-
+        # Перенаправление на страницу с продуктами сразу
+        return redirect(
+            url_for(
+                'products', 
+                user_id=user_id, 
+                min_price=min_price, 
+                max_price=max_price, 
+                min_rating=min_rating,
+                max_rating=max_rating
+            )
+        )
     else:
         return render_template("home.html")
 
-
-@app.route('/products')
+@app.route('/products', methods=["GET", "POST"])
 def products():
     # Получаем ID пользователя из параметров запроса
     user_id = request.args.get('user_id')
+
+    # Получаем параметры фильтрации из запроса
+    min_price = request.args.get('min_price', type=float)
+    max_price = request.args.get('max_price', type=float)
+    min_rating = request.args.get('min_rating', type=float)
+    max_rating = request.args.get('max_rating', type=float)
 
     if user_id:
         # Получаем последний запрос пользователя
@@ -91,15 +107,27 @@ def products():
 
         if last_request:
             # Проверяем наличие файла перед его загрузкой
-            file_path = f'{user_id}_SORTED_PRODUCTS_DATA.json'
+            file_path = f'{user_id}_PRODUCTS_DATA.json'
+            sorted_file_path = f'{user_id}_SORTED_PRODUCTS_DATA.json'
             time.sleep(5)
 
             while not os.path.exists(file_path):
                 # Если файл не найден, ожидаем 1 секунду перед повторной проверкой
                 time.sleep(10)
 
-            # Когда файл найден, загружаем данные
-            with open(file_path, encoding='utf-8') as f:
+            # Когда файл найден, загружаем данные и сортируем их
+            sort_products(
+                min_price=min_price,
+                max_price=max_price,
+                min_rating=min_rating,
+                max_rating=max_rating,
+                input_file=file_path,
+                output_file=sorted_file_path
+                )
+              
+
+            # Загружаем отсортированные данные
+            with open(sorted_file_path, "r", encoding='utf-8') as f:
                 data = json.load(f)
 
             return render_template('product_json.html', data=data, last_request=last_request)
@@ -107,12 +135,23 @@ def products():
             return "No requests found for this user."
 
     return redirect(url_for('home'))
+    
+@app.route('/api/products', methods=['GET'])
+def get_products():
+    user_id = request.args.get('user_id')
 
+    if not user_id:
+        return jsonify({"error": "User ID is required"}), 400
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
+    sorted_file_path = f'{user_id}_SORTED_PRODUCTS_DATA.json'
 
+    if not os.path.exists(sorted_file_path):
+        return jsonify([])  # Возвращаем пустой список, если данных пока нет
+
+    with open(sorted_file_path, "r", encoding='utf-8') as f:
+        data = json.load(f)
+
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(debug=True)
